@@ -32,7 +32,7 @@ return [
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect' => 'http://provasito.local:8080/auth/callback',
+        'redirect' => 'https://provasito.local/auth/callback',
     ],
 
     'instagram' => [

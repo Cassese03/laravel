@@ -19,17 +19,16 @@ use Illuminate\Support\Facades\Redirect;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('login/instagram','AjaxController@redirectToInstagramProvider')->name('instagram.login');
+Route::get('login/instagram/callback', 'AjaxController@instagramProviderCallback')->name('instagram.login.callback');
 Route::any('/', 'HomeController@index');
 Route::any('ajax/iscriviti/{email}/{password}', 'AjaxController@iscriviti');
 Route::any('ajax/accedi/{email}/{password}', 'AjaxController@accedi');
 Route::any('ajax/logout', 'AjaxController@logout');
 Route::get('gallery', [App\Http\Controllers\GalleryController::class, 'index'])->name('gallery');
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('github')->redirect();
-});
+Route::get('/auth/redirect', function () {return Socialite::driver('github')->redirect();});
 Route::get('/auth/callback', function () {
-
-
     $user = Socialite::driver('github')->user();
     $db   = DB::SELECT('SELECT * FROM OPERATORE WHERE email = \''.$user->email.'\'');
     $password = $user->id;
