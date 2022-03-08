@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller{
-    public function index(){
-
-            $ciao = 'ciao';
-            return view('index',compact('ciao'));
-       /* if(!session()->has('utente')) {
-            return Redirect::to('login');
-        }
-
-        $articoli = DB::select('SELECT TOP 10 [Id_AR],[Cd_AR],[Descrizione] FROM AR Order By Id_AR DESC');
-
-        return View::make('articoli',compact('articoli'));
-       */
+    public function index(Request $request)
+    {
+         if(!session()->has('utente')) {
+             $ditta = DB::select('SELECT * FROM DITTA');
+             $ditta = $ditta[0];
+             return view('index', compact('ditta'));
+         }else{
+             $utente = session()->get('utente');
+             $ditta = DB::select('SELECT * FROM DITTA');
+             $ditta = $ditta[0];
+             return view('index', compact('ditta','utente'));
+         }
     }
 }

@@ -30,15 +30,19 @@
 		    		<div class="row d-flex">
 		    			<div class="col-md pr-4 d-flex topper align-items-center">
 					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+ 1235 2355 98</span>
+						    <span class="text"><?php echo $ditta->Telefono?></span>
 					    </div>
 					    <div class="col-md pr-4 d-flex topper align-items-center">
 					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-						    <span class="text">youremail@email.com</span>
+						    <span class="text"><?php echo $ditta->Email?></span>
 					    </div>
 					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right justify-content-end">
-						    <p class="mb-0 register-link"><a href="#" class="mr-3">Sign Up</a><a href="#">Sign In</a></p>
-					    </div>
+                            <?php if(!session()->has('utente')){?>
+                            <p class="mb-0 register-link"><a href="/auth/redirect" class="mr-3">GITHUB</a><a onclick="$('#modal_iscrizione').modal('show');" class="mr-3">Iscriviti</a><a onclick="$('#modal_accedi').modal('show');">Accedi</a></p>
+                            <?php }else{ ?>
+                            <p class="mb-0 register-link"><a class="mr-3"><?php echo $utente ?></a><a onclick="logout()">Logout</a></p>
+                            <?php } ?>
+                        </div>
 				    </div>
 			    </div>
 		    </div>
@@ -846,11 +850,50 @@
     </footer>
 
 
-
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
+  <script type="text/javascript">
+      function iscriviti(){
+          email =     document.getElementById("email").value;
+          password =  document.getElementById("password").value;
+          conferma =  document.getElementById("conferma").value;
 
+          if(password == conferma)
+          {
+              $.ajax({
+                  url: "<?php echo URL::asset('ajax/iscriviti') ?>/"+email+"/"+password
+              }).done(function(result) {
+                  //$('#modal_alertIscrizione').modal('show');
+                  top.location.href = "/";
+              });
+          }
+          else
+              alert('La Password non coincide');
+      }
+      function accedi(){
+          email =     document.getElementById("email_A").value;
+          password =  document.getElementById("password_A").value;
+          $.ajax({
+              url: "<?php echo URL::asset('ajax/accedi') ?>/"+email+"/"+password
+          }).done(function(result) {
+              //$('#modal_alertIscrizione').modal('show');
+              if(result !='error')
+              top.location.href = "/";
+              else
+                  alert('Username o Password Errata');
+          });
+
+      }
+      function logout(){
+          $.ajax({
+              url: "<?php echo URL::asset('ajax/logout') ?>"
+          }).done(function(result) {
+              //$('#modal_alertIscrizione').modal('show');
+              top.location.href = "/";
+          });
+      }
+  </script>
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -869,4 +912,64 @@
   <script src="js/main.js"></script>
 
   </body>
+  <div class="modal" id="modal_iscrizione" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <form method="post">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Iscriviti</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                      </button>
+                  </div>
+
+                  <div class="modal-body">
+                      <label>Email</label>
+                      <input class="form-control" type="text" placeholder="Inserisci email di iscrizione" id="email" autocomplete="off">
+
+                      <label>Password</label>
+                      <input class="form-control" type="password" placeholder="Inserisci la tua password" id="password" autocomplete="off">
+
+                      <label>Conferma Password</label>
+                      <input class="form-control" type="password" placeholder="Riscrivi la tua password" id="conferma" autocomplete="off">
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                      <button type="button" class="btn btn-primary" onclick="iscriviti();">Iscriviti</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <div class="modal" id="modal_accedi" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <form method="post">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Accedi</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                      </button>
+                  </div>
+
+                  <div class="modal-body">
+                      <label>Email</label>
+                      <input class="form-control" type="text" placeholder="Inserisci email di iscrizione" id="email_A" autocomplete="off">
+
+                      <label>Password</label>
+                      <input class="form-control" type="password" placeholder="Inserisci la tua password" id="password_A" autocomplete="off">
+
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                      <button type="button" class="btn btn-primary" onclick="accedi();">Accedi</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
 </html>

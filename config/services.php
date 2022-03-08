@@ -29,5 +29,16 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => 'http://provasito.local:8080/auth/callback',
+    ],
+
+    'instagram' => [
+        'client_id' => env('INSTAGRAM_CLIENT_ID'),
+        'client_secret' => env('INSTAGRAM_CLIENT_SECRET'),
+        'redirect' => env('INSTAGRAM_REDIRECT_URI'),
+    ],
 
 ];
